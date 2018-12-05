@@ -9,22 +9,23 @@ from requests.packages.urllib3.util.retry import Retry
 
 
 
-def get_matches(match_ids_csv):
-    """takes the name of a csv containing Dota 2 match ids (under a column
-    "match_id") and returns the matches as json objects.
+"""takes the name of a csv containing Dota 2 match ids (under a column
+"match_id") and returns the matches as json objects.
 
-    """
-    df = pd.read_csv(f'{match_ids_csv}.csv')
-    match_ids = df['match_id'].values.tolist()
+"""
+logging.basicConfig(level=logging.DEBUG)
 
-    s = requests.Session()
-    retries = Retry(total=None, backoff_factor=1, status_forcelist=[ 502, 503, 504 ])
-    s.mount('http://', HTTPAdapter(max_retries=retries))
+df = pd.read_csv('top_ids_patch_719.csv')
+match_ids = df['match_id'].values.tolist()
 
-    for id in match_ids:
-        r = s.get(f"https://api.opendota.com/api/matches/{id}")
-        r = r.json()
+s = requests.Session()
+retries = Retry(total=None, backoff_factor=1, status_forcelist=[ 502, 503, 504 ])
+s.mount('http://', HTTPAdapter(max_retries=retries))
 
-        with open(f'data/patch_719_scrape/{id}.json', 'w') as outfile:
-            json.dump(r, outfile)
-        time.sleep(1.1)
+for id in match_ids:
+    r = s.get(f"https://api.opendota.com/api/matches/{id}")
+    r = r.json()
+
+    with open(f'data/patch_719_scrape/{id}.json', 'w') as outfile:
+        json.dump(r, outfile)
+    time.sleep(1.1)
