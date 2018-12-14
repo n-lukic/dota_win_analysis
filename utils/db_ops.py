@@ -2,8 +2,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Date, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from api_ops import get_radiant_heroes, get_dire_heroes
 
-def insert_match(match_id):
+def insert_match(r):
     """
     Takes Match json object and inserts the data into the database
     """
@@ -45,7 +46,9 @@ def insert_match(match_id):
         comeback = r['comeback'],
         loss = r['loss'],
         win = r['win'],
-        replay_url = r['replay_url']
+        replay_url = r['replay_url'],
+        radiant_heroes = get_radiant_heroes(r),
+        dire_heroes = get_dire_heroes(r)
 
     )
 

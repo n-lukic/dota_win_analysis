@@ -2,6 +2,9 @@ import requests
 import json
 import pandas as pd
 import time
+import logging
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 def get_match(match_id):
     """
@@ -25,24 +28,24 @@ def get_heroes():
     r = r.json()
 
     df = pd.DataFrame(r)
-    df.to_csv('heroes_data.csv')
+    df.to_csv('data/heroes_data.csv')
 
 def get_radiant_heroes(r):
     radiant_heroes = []
-        for player in r['players']:
-            hero_id = r['players'][player]['hero_id']
+    for player in r['players']:
+        hero_id = r['players'][player]['hero_id']
 
-            if 0 <= r['players'][player]['player_slot'] <= 127:
-                radiant_heroes.append(hero_id)
+        if 0 <= r['players'][player]['player_slot'] <= 127:
+            radiant_heroes.append(hero_id)
     radiant_heroes = '|'.join(radiant_heroes)
     return radiant_heroes
 
- def get_dire_heroes(r):
-     dire_heroes = []
-         for player in r['players']:
-             hero_id = r['players'][player]['hero_id']
+def get_dire_heroes(r):
+    dire_heroes = []
+    for player in r['players']:
+        hero_id = r['players'][player]['hero_id']
 
-             if 128 <= r['players'][player]['player_slot'] <= 255:
-                 dire_heroes.append(hero_id)
+        if 128 <= r['players'][player]['player_slot'] <= 255:
+            dire_heroes.append(hero_id)
     dire_heroes = '|'.join(dire_heroes)
     return dire_heroes
