@@ -1,16 +1,21 @@
-from utils.db_ops import create_db, insert_match
-from utils.api_ops import get_match
+import utils.db_ops as db
+import utils.api_ops as api
+import pandas as pd
+import json
+import time
 
-create_db()
+db.create_db()
 
 df = pd.read_csv('data.csv')
 match_ids = df['match_id'].values.tolist()
 
 for id in match_ids:
 
-    r = get_match(id)
-    insert_match(r)
+    r = api.get_match(id)
+    db.insert_match(r)
 
     with open(f'data/matches_out/{id}.json', 'w') as outfile:
         json.dump(r, outfile)
     time.sleep(1.1)
+
+    r
