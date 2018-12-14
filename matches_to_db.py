@@ -16,6 +16,6 @@ for id in match_ids:
 
     with open(f'data/matches_out/{id}.json', 'w') as outfile:
         json.dump(r, outfile)
-    time.sleep(1.1)
+    time.sleep(0.1)
 
     r

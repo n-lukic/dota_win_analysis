@@ -6,7 +6,7 @@ import logging
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-def get_match(match_id):
+def get_match(match_id, api_key):
     """
     Takes a Dota2 match id and returns a json file from the Open Dota API
     """
@@ -14,7 +14,7 @@ def get_match(match_id):
     retries = Retry(total=None, backoff_factor=1, status_forcelist=[ 502, 503, 504 ])
     s.mount('http://', HTTPAdapter(max_retries=retries))
 
-    r = s.get(f"https://api.opendota.com/api/matches/{match_id}")
+    r = s.get(f"https://api.opendota.com/api/matches/{match_id}?api_key={api_key}")
     r = r.json()
 
     return r
